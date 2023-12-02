@@ -98,12 +98,7 @@ const handleSelectAll = () => {
     setPopupData({ ...popupData, [field]: value });
   };
 
-  const handleKeyPress = (e) => {
-    // Trigger search on ENTER key press
-    if (e.key === 'Enter') {
-      handleSearch(searchTerm);
-    }
-  };
+  
  
   const paginatedUsers = filteredUsers.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
  
