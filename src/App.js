@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import UserTable from './components/UserTable';
 import Pagination from './components/Pagination';
-
+// import Container from 'react-bootstrap/Container';
 const App = () => {
   const [users, setUsers] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
@@ -74,14 +74,18 @@ const App = () => {
   const paginatedUsers = filteredUsers.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   return (
-    <div>
-      <h1>Admin Dashboard</h1>
+    <div className="mt-4 px-8">
+      <h1 className="text-2xl font-bold mb-4">Admin Dashboard</h1>
+      <div>
       <input
         type="text"
         placeholder="Search by name..."
         value={searchTerm}
         onChange={(e) => handleSearch(e.target.value)}
+        className="border p-2 rounded w-2/6 mb-4"
       />
+      <button className="delete-selected mx-2 border border-red-400 px-2 rounded" onClick={handleDeleteSelected}>Delete Selected</button>
+      </div>
       <UserTable
         users={paginatedUsers}
         selectedRows={selectedRows}
@@ -93,13 +97,15 @@ const App = () => {
         itemsPerPage={itemsPerPage}
         handleSelectAll={handleSelectAll}
         setUsers={setUsers}
+        className='mt-4'
       />
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}
         handlePageChange={handlePageChange}
+        className='my-2'
       />
-      <button className="delete-selected" onClick={handleDeleteSelected}>Delete Selected</button>
+    
     </div>
   );
 };
