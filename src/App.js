@@ -5,44 +5,58 @@ import Pagination from './components/Pagination';
 import PopupForm from './components/PopupForm';
 
 const App = () => {
-  const [users, setUsers] = useState([]);
-  const [selectedRows, setSelectedRows] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [editMode, setEditMode] = useState(null);
-  const [showPopup, setShowPopup] = useState(false);
-  const [popupData, setPopupData] = useState(null);
+  
+const itemsPerPage = 10;
+const [users, setUsers] = useState([]);
+const [selectedRows, setSelectedRows] = useState([]);
+const [currentPage, setCurrentPage] = useState(1);
+const [searchTerm, setSearchTerm] = useState('');
+const [editMode, setEditMode] = useState(null);
+const [showPopup, setShowPopup] = useState(false);
+const [popupData, setPopupData] = useState(null);
+const [totalPages, setTotalPages] = useState(1);
 
-  const itemsPerPage = 10;
+useEffect(() => {
+  axios.get('https://geektrust.s3-ap-southeast-1.amazonaws.com/adminui-problem/members.json')
+    .then(response => {
+      setUsers(response.data);
+      // Calculate initial total pages
+      setTotalPages(Math.ceil(response.data.length / itemsPerPage));
+    })
+    .catch(error => {
+      console.error('Error fetching data:', error);
+    });
+}, []);
 
-  useEffect(() => {
-    axios.get('https://geektrust.s3-ap-southeast-1.amazonaws.com/adminui-problem/members.json')
-      .then(response => {
-        setUsers(response.data);
-      })
-      .catch(error => {
-        console.error('Error fetching data:', error);
-      });
-  }, []);
+// Recalculate total pages when users or currentPage changes
+useEffect(() => {
+  setTotalPages(Math.ceil(users.length / itemsPerPage));
+}, [users, itemsPerPage, currentPage]);
 
-  const handleCheckboxChange = (id) => {
-    const updatedSelectedRows = selectedRows.includes(id)
-      ? selectedRows.filter(rowId => rowId !== id)
-      : [...selectedRows, id];
+const handleCheckboxChange = (id) => {
+  const updatedSelectedRows = selectedRows.includes(id)
+    ? selectedRows.filter(rowId => rowId !== id)
+    : [...selectedRows, id];
 
-    setSelectedRows(updatedSelectedRows);
-  };
+  setSelectedRows(updatedSelectedRows);
+};
 
-  const handleDeleteRow = (id) => {
-    const updatedUsers = users.filter(user => user.id !== id);
-    setUsers(updatedUsers);
-    setSelectedRows(selectedRows.filter(rowId => rowId !== id));
-  };
+const handleDeleteRow = (id) => {
+  const updatedUsers = users.filter(user => user.id !== id);
+  setUsers(updatedUsers);
+  setSelectedRows(selectedRows.filter(rowId => rowId !== id));
+};
 
-  const handleSelectAll = () => {
-    const allIds = users.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map(user => user.id);
-    setSelectedRows(selectedRows.length === allIds.length ? [] : allIds);
-  };
+const handleSelectAll = () => {
+  const allIds = users.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map(user => user.id);
+  setSelectedRows(selectedRows.length === allIds.length ? [] : allIds);
+};
+
+  const filteredUsers = users.filter(user =>
+    Object.values(user).some(val =>
+      typeof val === 'string' && val.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+  );
 
   const handleDeleteSelected = () => {
     const updatedUsers = users.filter(user => !selectedRows.includes(user.id));
@@ -84,14 +98,15 @@ const App = () => {
     setPopupData({ ...popupData, [field]: value });
   };
 
-  const filteredUsers = users.filter(user =>
-    Object.values(user).some(val =>
-      typeof val === 'string' && val.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-  );
-
-  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+  const handleKeyPress = (e) => {
+    // Trigger search on ENTER key press
+    if (e.key === 'Enter') {
+      handleSearch(searchTerm);
+    }
+  };
+ 
   const paginatedUsers = filteredUsers.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+ 
 
   return (
     <div className="mt-4 px-8">
@@ -103,7 +118,7 @@ const App = () => {
           placeholder="Search..."
           value={searchTerm}
           onChange={(e) => handleSearch(e.target.value)}
-          className="border border-gray-400 p-2 rounded w-1/6 mb-4"
+          className="search-bar border border-gray-400 p-2 rounded w-1/6 mb-4"
         />
         <button className="delete-selected bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onClick={handleDeleteSelected}><svg
                       xmlns="http://www.w3.org/2000/svg"

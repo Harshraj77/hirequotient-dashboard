@@ -16,7 +16,7 @@ const UserTable = ({
   return (
     <table className="mt-4 border-collapse w-full">
       <thead>
-        <tr className="border-b-2 bg-gray-300 text-center">
+        <tr className="border-b-2 bg-slate-300 text-center">
           <th className="p-2">
             <input
               type="checkbox"
@@ -24,7 +24,6 @@ const UserTable = ({
               onChange={handleSelectAll}
             />
           </th>
-          <th className="p-2">ID</th>
           <th className="p-2">Name</th>
           <th className="p-2">Email</th>
           <th className="p-2">Role</th>
@@ -46,7 +45,6 @@ const UserTable = ({
                 onChange={() => handleCheckboxChange(user.id)}
               />
             </td>
-            <td className="p-2">{user.id}</td>
             <td className="p-2">
               {editMode === user.id ? (
                 <button
@@ -62,30 +60,10 @@ const UserTable = ({
             <td className="p-2">{user.email}</td>
             <td className="p-2">{user.role}</td>
             <td className="p-2">
-              {editMode === user.id ? (
-                <button
-                  className="border border-black text-black font-bold py-1 px-2 rounded"
-                  onClick={() => handleEdit(user.id)}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    className="w-6 h-6"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                </button>
-              ) : (
+               
                 <>
                   <button
-                    className="border border-gray-500 text-black-500 hover:bg-green-100 font-bold py-1 px-2 rounded"
+                    className="edit_button border border-gray-500 text-black-500 hover:bg-green-100 font-bold py-1 px-2 rounded"
                     onClick={() => handleEdit(user.id)}
                   >
                     <svg
@@ -104,7 +82,7 @@ const UserTable = ({
                     </svg>
                   </button>
                   <button
-                    className="border border-gray-500 text-red-500 hover:bg-red-100 font-bold py-1 px-2 rounded ml-2"
+                    className="delete_button border border-gray-500 text-red-500 hover:bg-red-100 font-bold py-1 px-2 rounded ml-2"
                     onClick={() => handleDeleteRow(user.id)}
                   >
                     <svg
@@ -123,7 +101,7 @@ const UserTable = ({
                     </svg>
                   </button>
                 </>
-              )}
+              
             </td>
           </tr>
         ))}
