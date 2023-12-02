@@ -8,15 +8,15 @@ const UserTable = ({
   editMode,
   handleEdit,
   handleSave,
+  handleInputChange,
   itemsPerPage,
   handleSelectAll,
   setUsers,
 }) => {
   return (
     <table className="mt-4 border-collapse w-full">
-      {/* Table header */}
       <thead>
-        <tr className="border-b-2 bg-gray-200 text-center">
+        <tr className="border-b-2 bg-gray-300 text-center">
           <th className="p-2">
             <input
               type="checkbox"
@@ -31,7 +31,6 @@ const UserTable = ({
           <th className="p-2">Action</th>
         </tr>
       </thead>
-      {/* Table body */}
       <tbody>
         {users.map((user) => (
           <tr
@@ -50,19 +49,12 @@ const UserTable = ({
             <td className="p-2">{user.id}</td>
             <td className="p-2">
               {editMode === user.id ? (
-                <input
-                  type="text"
-                  value={user.name}
-                  onChange={(e) => {
-                    const updatedUsers = users.map((u) =>
-                      u.id === user.id
-                        ? Object.assign({}, u, { name: e.target.value })
-                        : u
-                    );
-                    setUsers(updatedUsers);
-                  }}
+                <button
                   className="border rounded p-1 text-center mx-auto"
-                />
+                  onClick={() => handleEdit(user.id)}
+                >
+                  {user.name}
+                </button>
               ) : (
                 user.name
               )}
@@ -73,7 +65,7 @@ const UserTable = ({
               {editMode === user.id ? (
                 <button
                   className="border border-black text-black font-bold py-1 px-2 rounded"
-                  onClick={() => handleSave(user.id)}
+                  onClick={() => handleEdit(user.id)}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
