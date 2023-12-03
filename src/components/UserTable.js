@@ -13,7 +13,7 @@ const UserTable = ({
   return (
     <table className="mt-4 border-collapse w-full">
       <thead>
-        <tr className="border-b-2 bg-slate-300 text-center">
+        <tr className="border-b-2 bg-slate-300 text-left">
           <th className="p-2">
             <input
               type="checkbox"
@@ -21,6 +21,7 @@ const UserTable = ({
               onChange={handleSelectAll}
             />
           </th>
+          <th className="p-2">Id</th>
           <th className="p-2">Name</th>
           <th className="p-2">Email</th>
           <th className="p-2">Role</th>
@@ -33,7 +34,7 @@ const UserTable = ({
             key={user.id}
             className={`border-b ${
               selectedRows.includes(user.id) ? "bg-gray-100" : ""
-            } text-center`}
+            } text-left`}
           >
             <td className="p-2">
               <input
@@ -42,6 +43,7 @@ const UserTable = ({
                 onChange={() => handleCheckboxChange(user.id)}
               />
             </td>
+            <td className="p-2">{user.id}</td>
             <td className="p-2">
               {editMode === user.id ? (
                 <button
