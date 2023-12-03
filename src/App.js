@@ -91,14 +91,6 @@ const App = () => {
   const handleSearch = (value) => {
     setSearchTerm(value);
     setCurrentPage(1);
-
-    // Recalculate total pages for filtered data
-    const filteredPages = Math.ceil(filteredUsers.length / itemsPerPage);
-    setTotalPages(
-      value.trim() !== ""
-        ? filteredPages || 1
-        : Math.ceil(users.length / itemsPerPage)
-    );
   };
 
   const handleEdit = (id) => {
@@ -122,6 +114,17 @@ const App = () => {
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
+
+  // useEffect hook recalculates the total pages based on the filtered users,added the users and searchTerm dependencies to it. This ensures that the total pages are updated whenever the users or search term change.
+
+  useEffect(() => {
+    const filteredPages = Math.ceil(filteredUsers.length / itemsPerPage);
+    setTotalPages(
+      searchTerm.trim() !== ""
+        ? filteredPages || 1
+        : Math.ceil(users.length / itemsPerPage)
+    );
+  }, [filteredUsers, itemsPerPage, searchTerm, users]);
 
   return (
     <div className="mt-4 px-8">
