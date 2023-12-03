@@ -7,11 +7,8 @@ const UserTable = ({
   handleDeleteRow,
   editMode,
   handleEdit,
-  handleSave,
-  handleInputChange,
   itemsPerPage,
   handleSelectAll,
-  setUsers,
 }) => {
   return (
     <table className="mt-4 border-collapse w-full">
